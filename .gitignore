@@ -39,3 +39,40 @@
 
 # debug information files
 *.dwo
+
+# Build directories
+build/
+
+# IDE and editor files
+.cache/
+.qtc*
+*.user
+
+# Log files
+*.log
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+Makefile
+*.ninja*
+
+# Qt Creator files
+*.creator
+*.files
+*.config
+
+# Temporary files
+*.tmp
+*~
+
+# Package manager
+.conan/
+
+# Qt binaries
+moc_*.cpp
+qrc_*.cpp
+ui_*.h
