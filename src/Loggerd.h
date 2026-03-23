@@ -24,6 +24,7 @@ public:
     void logInfo(const std::string& message, const char* file = nullptr, int line = -1);
     void logCritical(const std::string& message, const char* file = nullptr, int line = -1);
     void logTrace(const std::string& message, const char* file = nullptr, int line = -1);
+    void logNothing() { };
     ~Loggerd();
 
 private:
@@ -35,28 +36,28 @@ private:
     std::list<MessageHandler*> m_messageHandlers;
 };
 
-#if LOG_DEBUG
-#define LOG_DEBUG_MSG(message) Loggerd::getInstance()->logDebug((message), __FILE__, __LINE__)
+#if LOG_LEVEL >= LOG_DEBUG
+#define LOG_DEBUG_MSG(level, message) Loggerd::getInstance()->logDebug((message), __FILE__, __LINE__)
 #else
-#define LOG_DEBUG_MSG(message) do { } while (false)
+#define LOG_DEBUG_MSG(level, message) level >= LOG_DEBUG ? Loggerd::getInstance()->logDebug((message), __FILE__, __LINE__) : Loggerd::getInstance()->logNothing()
 #endif
 
-#if LOG_INFO
-#define LOG_INFO_MSG(message) Loggerd::getInstance()->logInfo((message), __FILE__, __LINE__)
+#if LOG_LEVEL >= LOG_INFO
+#define LOG_INFO_MSG(level, message) Loggerd::getInstance()->logInfo((message), __FILE__, __LINE__)
 #else
-#define LOG_INFO_MSG(message) do { } while (false)
+#define LOG_INFO_MSG(level, message) level >= LOG_INFO ? Loggerd::getInstance()->logInfo((message), __FILE__, __LINE__) : Loggerd::getInstance()->logNothing()
 #endif
 
-#if LOG_CRITICAL
-#define LOG_CRITICAL_MSG(message) Loggerd::getInstance()->logCritical((message), __FILE__, __LINE__)
+#if LOG_LEVEL >= LOG_CRITICAL
+#define LOG_CRITICAL_MSG(level, message) Loggerd::getInstance()->logCritical((message), __FILE__, __LINE__)
 #else
-#define LOG_CRITICAL_MSG(message) do { } while (false)
+#define LOG_CRITICAL_MSG(level, message) level >= LOG_CRITICAL ? Loggerd::getInstance()->logCritical((message), __FILE__, __LINE__) : Loggerd::getInstance()->logNothing()
 #endif
 
-#if LOG_TRACE
-#define LOG_TRACE_MSG(message) Loggerd::getInstance()->logTrace((message), __FILE__, __LINE__)
+#if LOG_LEVEL >= LOG_TRACE
+#define LOG_TRACE_MSG(level, message)  Loggerd::getInstance()->logTrace((message), __FILE__, __LINE__)
 #else
-#define LOG_TRACE_MSG(message) do { } while (false)
+#define LOG_TRACE_MSG(level, message) level >= LOG_TRACE ? Loggerd::getInstance()->logTrace((message), __FILE__, __LINE__) : Loggerd::getInstance()->logNothing()
 #endif
 
 #endif // LOGGERD_H
