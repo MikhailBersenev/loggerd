@@ -2,7 +2,7 @@
 #define LOGGERD_H
 
 #include <list>
-#include <memory>
+#include <mutex>
 #include <string>
 
 #include "config.h"
@@ -32,7 +32,7 @@ private:
     static const char* toString(LogLevel level);
     static std::string formatMessage(LogLevel level, const std::string& message, const char* file, int line);
 
-    static std::unique_ptr<Loggerd> m_instance;
+    std::mutex m_handlersMutex;
     std::list<MessageHandler*> m_messageHandlers;
 };
 

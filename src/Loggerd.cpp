@@ -20,32 +20,35 @@ const char* getFileName(const char* path) {
 }
 }  // namespace
 
-std::unique_ptr<Loggerd> Loggerd::m_instance = nullptr;
-
 Loggerd::Loggerd() {
 
 }
 
 Loggerd *Loggerd::getInstance()
 {
-    if (!m_instance) {
-        m_instance.reset(new Loggerd());
-    }
-
-    return m_instance.get();
+    static Loggerd instance;
+    return &instance;
 }
 
 void Loggerd::addMessageHandler(MessageHandler *messageHandler)
 {
-    if (messageHandler) {
-        m_messageHandlers.push_back(messageHandler);
+    if (!messageHandler) {
+        return;
     }
+    std::lock_guard<std::mutex> lock(m_handlersMutex);
+    m_messageHandlers.push_back(messageHandler);
 }
 
 void Loggerd::log(LogLevel level, const std::string& message, const char* file, int line) {
     const std::string formattedMessage = formatMessage(level, message, file, line);
 
-    for (MessageHandler* messageHandler : m_messageHandlers) {
+    std::list<MessageHandler*> handlersSnapshot;
+    {
+        std::lock_guard<std::mutex> lock(m_handlersMutex);
+        handlersSnapshot = m_messageHandlers;
+    }
+
+    for (MessageHandler* messageHandler : handlersSnapshot) {
         if (messageHandler) {
             messageHandler->sendMessage(formattedMessage);
         }
