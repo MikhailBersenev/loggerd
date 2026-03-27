@@ -6,7 +6,7 @@ Features:
 - multiple handlers (`MessageHandler`, `TxtMessageHandler`),
 - log levels (`DEBUG`, `INFO`, `TRACE`, `CRITICAL`),
 - source location in logs (`[file.cpp:line]`),
-- compile-time level toggles via macros.
+- compile-time level toggles via macros (`LOG_*_MSG(level, message)`; see `USAGE.md`).
 
 ## Quick Start
 

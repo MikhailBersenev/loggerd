@@ -57,19 +57,21 @@ int main() {
     logger->addMessageHandler(&consoleHandler);
     logger->addMessageHandler(&fileHandler);
 
-    LOG_DEBUG_MSG("App started");
-    LOG_INFO_MSG("Service initialized");
-    LOG_TRACE_MSG("Trace checkpoint");
-    LOG_CRITICAL_MSG("Critical event example");
+    LOG_DEBUG_MSG(LOG_MAIN, "App started");
+    LOG_INFO_MSG(LOG_MAIN, "Service initialized");
+    LOG_TRACE_MSG(LOG_MAIN, "Trace checkpoint");
+    LOG_CRITICAL_MSG(LOG_MAIN, "Critical event example");
 
     return 0;
 }
 ```
 
+`LOG_MAIN` is defined in `config.h` (default `LOG_CRITICAL`). Override it in your build or replace with another threshold constant (see below).
+
 Typical output:
 
 ```text
-[INFO] [2026-03-01 23:14:31] [main.cpp:15] Service initialized
+[INFO] [2026-03-01 23:14:31] [main.cpp:61] Service initialized
 ```
 
 ## 5. Log levels and compile-time switches
@@ -104,10 +106,14 @@ If a level is set to `0`, corresponding macro calls compile to no-op.
 
 ## 6. Available macros
 
-- `LOG_DEBUG_MSG(message)`
-- `LOG_INFO_MSG(message)`
-- `LOG_TRACE_MSG(message)`
-- `LOG_CRITICAL_MSG(message)`
+Each macro takes two arguments: `(level, message)`.
+
+- `LOG_DEBUG_MSG(level, message)`
+- `LOG_INFO_MSG(level, message)`
+- `LOG_TRACE_MSG(level, message)`
+- `LOG_CRITICAL_MSG(level, message)`
+
+The `message` is the text written to the log. The `level` argument is compared to the matching `LOG_*` constant when that category is compiled out globally (when `LOG_LEVEL` in `config.h` is below that category); otherwise it is unused. In application code it is typical to pass `LOG_MAIN` or your own threshold macro.
 
 All macros automatically pass `__FILE__` and `__LINE__`, so source location is included in the log entry.
 
