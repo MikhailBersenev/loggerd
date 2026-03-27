@@ -5,6 +5,7 @@ LIBRARY_NAME = loggerd
 
 # Headers
 HEADERS += \
+    $$PWD/config.h \
     $$PWD/src/Loggerd.h \
     $$PWD/src/MessageHandler.h \
     $$PWD/src/TxtMessageHandler.h
@@ -16,7 +17,9 @@ SOURCES += \
     $$PWD/src/TxtMessageHandler.cpp
 
 # Additional include paths
-INCLUDEPATH += $$PWD/src
+INCLUDEPATH += \
+    $$PWD \
+    $$PWD/src
 
 # Define config macros for conditional compilation
 DEFINES += LOGGERD_LIBRARY
