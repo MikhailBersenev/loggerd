@@ -4,6 +4,12 @@ TARGET = exampleApp
 CONFIG += console c++17
 CONFIG -= app_bundle
 
+# Application provides `config.h` in the same directory as main.cpp.
+INCLUDEPATH += $$PWD
+
+HEADERS += \
+    config.h
+
 SOURCES += \
     main.cpp
 

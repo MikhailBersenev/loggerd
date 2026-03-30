@@ -66,7 +66,7 @@ int main() {
 }
 ```
 
-`LOG_MAIN` is defined in `config.h` (default `LOG_CRITICAL`). Override it in your build or replace with another threshold constant (see below).
+`LOG_MAIN` is defined in your application's `config.h` (copy it from `config.h.example` shipped with `loggerd`; default `LOG_CRITICAL`). Override it in your build or replace it with another threshold constant (see below).
 
 Typical output:
 
@@ -83,9 +83,9 @@ The library uses compile-time macros:
 - `LOG_TRACE`
 - `LOG_CRITICAL`
 
-Defaults are defined in `config.h` (all enabled by default).
+Defaults are defined in `config.h.example` (copied to your application's `config.h`).
 
-### Option A: change defaults in `config.h`
+### Option A: change defaults in your application's `config.h`
 
 ```cpp
 #define LOG_TRACE 0
@@ -156,3 +156,30 @@ Loggerd::getInstance()->addMessageHandler(&handler);
 - Keep handler objects alive while logger uses them.
 - Avoid expensive string construction in disabled log levels.
 - For production builds, disable noisy levels (for example `LOG_TRACE=0`).
+
+## 10. Mini-recipe: Where to put `config.h` (CMake and qmake)
+`loggerd` includes `config.h` via `#include "config.h"` in `Loggerd.h`, so `config.h` should be provided by your project (application), not the library itself.
+
+### CMake (`add_subdirectory`)
+1. Copy `loggerd/config.h.example` to your application folder as `config.h`:
+- `your-app/config.h`
+2. In `CMakeLists.txt`, before `add_subdirectory(external/loggerd ...)`, set:
+```cmake
+set(LOGGERD_CONFIG_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+add_subdirectory(external/loggerd loggerd_build)
+```
+3. Then build as usual:
+```cmake
+add_executable(my_app src/main.cpp)
+target_link_libraries(my_app PRIVATE loggerd::loggerd)
+```
+
+### qmake (`.pro`)
+1. Copy Add `loggerd/config.h.example` to your application folder as `config.h`:
+- `your-app/config.h`
+2. In your `.pro`, add the include path to the `config.h` directory and include `loggerd.pri`:
+```qmake
+INCLUDEPATH += $$PWD
+HEADERS += $$PWD/config.h
+include(../../loggerd.pri)
+```

@@ -1,0 +1,37 @@
+#ifndef CONFIG_H
+#define CONFIG_H
+
+// loggerd configuration example.
+// Your application should provide its own `config.h` (copied from this file)
+// so compilation and macros can be customized at the app level.
+
+#ifndef LOG_DEBUG
+#define LOG_DEBUG 2
+#endif
+
+#ifndef LOG_INFO
+#define LOG_INFO 3
+#endif
+
+#ifndef LOG_CRITICAL
+#define LOG_CRITICAL 1
+#endif
+
+#ifndef LOG_TRACE
+#define LOG_TRACE 4
+#endif
+
+#ifndef LOG_LEVEL
+// Choose your preferred level here.
+// By default, enable INFO and above (see macros in Loggerd.h).
+#define LOG_LEVEL LOG_INFO
+#endif
+
+#ifndef LOG_MAIN
+// Choose your threshold for LOG_MAIN.
+// By default, enable CRITICAL.
+#define LOG_MAIN LOG_CRITICAL
+#endif
+
+#endif
+
